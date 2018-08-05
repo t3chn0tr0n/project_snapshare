@@ -5,9 +5,7 @@ class Snap(models.Model):
     pub_date = models.DateTimeField()
     caption = models.CharField(max_length=20)
     likes = models.PositiveSmallIntegerField(default=0)
-
-    def __str__(self):
-        return self.title
+    album = models.CharField(max_length=20)
 
     def __str__(self):
         return self.caption
