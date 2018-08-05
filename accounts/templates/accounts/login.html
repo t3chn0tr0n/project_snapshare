@@ -1,0 +1,29 @@
+{% extends 'accounts/main.html' %}
+{% block body %}
+    <div class="container">
+        <center>
+            {% if error %}
+                {{ error }}
+                <br />
+                <br />
+            {% endif %}
+            <form method="POST" class="post-form" action="{% url 'login' %}">
+                {% csrf_token %}
+                <p>
+                <input class="form-control" style="width: 300px;" type="text" name="username"  placeholder="Username"/>
+                </p>
+
+                <p>
+                <input class="form-control" style="width: 300px;" type="password" name="password" placeholder="Password"/>
+                </p>
+
+                <input class="btn btn-primary"  type="submit" value="Login" />
+            </form>
+            <br />
+            <h5>
+                Not hooked up with us yet? <a href="{% url 'signup' %}">Sign up</a>
+            </h5>
+        </center>
+    </div> 
+{% endblock %} 
+

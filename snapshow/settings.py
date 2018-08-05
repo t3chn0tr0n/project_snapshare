@@ -22,6 +22,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'snaps',
+    'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -58,7 +59,7 @@ TEMPLATES = [
             ],
         },
     },
-     {
+    {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'DIRS': [global_templates],
     },
@@ -119,6 +120,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'resources/statics')
 STATICFILES_DIRS = [
     global_statics,
 	]
