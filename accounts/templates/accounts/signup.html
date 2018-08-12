@@ -3,6 +3,11 @@
     
     <div class="container">
         <center>
+
+            <img src="https://image.flaticon.com/icons/svg/1053/1053353.svg" height="100px" weight="100px" alt="LOGIN"/>
+            <br />
+            <br />
+
             {% if error %}
                 {{ error }}
                 <br />
@@ -14,15 +19,19 @@
             <form method="POST" action="{% url 'signup' %}">
                 {% csrf_token %}
                 <p>
-                <input type="text"  class="form-control" style="width: 300px;"name="username" placeholder="Username"/>
-                </p>
-                
-                <p>
-                <input type="password" class="form-control" style="width: 300px;" name="password1" placeholder="Password"/>
+                <input type="text"  class="form-control" style="width: 300px;"name="username" placeholder="Username" />
                 </p>
 
                 <p>
-                <input type="password"  class="form-control" style="width: 300px;"name="password2" placeholder="Confirm Password"/>
+                <input type="email"  class="form-control" style="width: 300px;"name="email" placeholder="Email" />
+                </p>
+                
+                <p>
+                <input type="password" class="form-control" style="width: 300px;" name="password1" placeholder="Password" />
+                </p>
+
+                <p>
+                <input type="password"  class="form-control" style="width: 300px;"name="password2" placeholder="Confirm Password" />
                 </p>
                 
                 <p>

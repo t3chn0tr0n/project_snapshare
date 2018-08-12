@@ -2,6 +2,9 @@
 {% block body %}
     <div class="container">
         <center>
+            <img src="https://image.flaticon.com/icons/svg/1053/1053364.svg" height="100px" weight="100px" alt="LOGIN"/>
+            <br />
+            <br />
             {% if error %}
                 {{ error }}
                 <br />
@@ -16,6 +19,8 @@
                 <p>
                 <input class="form-control" style="width: 300px;" type="password" name="password" placeholder="Password"/>
                 </p>
+
+                <input type="hidden" name="next" value="{% firstof request.path '/' %}" />
 
                 <input class="btn btn-primary"  type="submit" value="Login" />
             </form>
