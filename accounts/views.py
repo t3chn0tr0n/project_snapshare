@@ -53,9 +53,11 @@ def signup(request):
             error = ""
             
             if request.POST["password1"] != request.POST["password2"]:
-                error = "Password must match!"
-            elif Temp_user.objects.filter(uname = request.POST["username"]).exists():
+                error = "Passwords must match!"
+            elif Temp_user.objects.filter(uname = request.POST["username"]).exists() or User.objects.filter(uname = request.POST["username"]).exists():
                 error = "Username already taken. Try Loging in!"
+            elif Temp_user.objects.filter(email=request.POST["email"]).exists() or User.objects.filter(email=request.POST["email"]).exists():
+                error = "An account already exists with that email!"
             
             # main show starts from here:
             # ===========================
@@ -84,8 +86,8 @@ def activate(request):
     if Temp_user.objects.filter(token=key).exists():
         tuser = Temp_user.objects.get(token=key)
         # Adding to user
-        user = User.objects.create_user(tuser.uname, password=tuser.password, email=tuser.email)
-        user.set_password(tuser.password) # Using this since django will re-hash the hashed password => Thus explicitely, re mentioning it!
+        user = User.objects.create_user(username=tuser.uname, password=tuser.password, email=tuser.email)
+        user.password = tuser.password # Using this since django will re-hash the hashed password => Thus explicitely, re mentioning it!
         user.is_active = True
         user.save()
 

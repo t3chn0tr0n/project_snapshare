@@ -36,8 +36,6 @@ def varification_mailto(reciever, token):
     sender = "snapshare"
     user = "djangoemaildem0@gmail.com"
     password = "djang0123"
-
-    send_mail(subject, body, sender, reciever, fail_silently=False, auth_user=user, auth_password=password,)
     
     try:
         send_mail(subject, body, sender, reciever, fail_silently=False, auth_user=user, auth_password=password,)
