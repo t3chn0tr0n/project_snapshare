@@ -1,3 +1,4 @@
+from random import randint
 from secrets import randbelow, token_urlsafe
 from django.conf import settings
 from django.core.mail import send_mail
@@ -36,9 +37,28 @@ def varification_mailto(reciever, token):
     sender = "snapshare"
     user = "djangoemaildem0@gmail.com"
     password = "djang0123"
-    
+
     try:
         send_mail(subject, body, sender, reciever, fail_silently=False, auth_user=user, auth_password=password,)
         return True
     except:
         return False
+
+
+def get_cute_image():
+    image_urls = {
+        1: "https://image.flaticon.com/icons/svg/141/141737.svg",
+        2: "https://image.flaticon.com/icons/svg/141/141746.svg",
+        3: "https://image.flaticon.com/icons/svg/141/141739.svg",
+        4: "https://image.flaticon.com/icons/svg/141/141744.svg",
+        5: "https://image.flaticon.com/icons/svg/141/141742.svg",
+        6: "https://image.flaticon.com/icons/svg/141/141745.svg",
+        7: "https://image.flaticon.com/icons/svg/141/141738.svg",
+        8: "https://image.flaticon.com/icons/svg/141/141736.svg",
+        9: "https://image.flaticon.com/icons/svg/141/141747.svg",
+        10: "https://image.flaticon.com/icons/svg/141/141740.svg",
+        11: "https://image.flaticon.com/icons/svg/141/141741.svg",
+        12: "https://image.flaticon.com/icons/svg/141/141743.svg"
+    }
+    num = randint(0, 13)
+    return image_urls[num]

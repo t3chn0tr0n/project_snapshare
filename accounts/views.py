@@ -18,11 +18,11 @@ def login(request):
                 auth.login(request, user)
                 return redirect('index')
             else:
-                error = "username or password invalid!"
+                error = "username or password invalid! Try signing up if not already!"
                 if Temp_user.objects.filter(uname=request.POST['username']).exists():
                     error = "Please Varify your email before logging in!"
                 
-                return render(request, 'accounts/login.html',{"title":"log in", 'error':error})
+                return render(request, 'accounts/login.html',{"title":"login_error", 'error':error})
         else:
             return render(request, 'accounts/login.html', {"title":"log in"})
 
@@ -54,7 +54,7 @@ def signup(request):
             
             if request.POST["password1"] != request.POST["password2"]:
                 error = "Passwords must match!"
-            elif Temp_user.objects.filter(uname = request.POST["username"]).exists() or User.objects.filter(uname = request.POST["username"]).exists():
+            elif Temp_user.objects.filter(uname = request.POST["username"]).exists() or User.objects.filter(username = request.POST["username"]).exists():
                 error = "Username already taken. Try Loging in!"
             elif Temp_user.objects.filter(email=request.POST["email"]).exists() or User.objects.filter(email=request.POST["email"]).exists():
                 error = "An account already exists with that email!"
@@ -66,10 +66,13 @@ def signup(request):
                 Temp_user.objects.create(uname=request.POST['username'], password=make_password(request.POST['password1']), email=request.POST['email'], token=token)
                 reciever = [request.POST["email"]]
                 if pyfunctions.varification_mailto(reciever, token):
-                    responce = "<h2> Email Sent <br /> Please Varify you email! </h2>"
+                    responce = ["Email Sent", "Please Varify you email!"]
                 else:
-                    responce = "<h1> ERROR! mail not sent </h1>" 
-                return HttpResponse(responce)
+                    responce = ["ERROR! mail not sent"] 
+                
+                img = pyfunctions.get_cute_image()
+                responce.append('<img src="' + img + '" height=50% width=50% alt="">')
+                return render(request, 'accounts/message.html', {'messages':responce})
             
             if error:
                 return render(request, 'accounts/signup.html', {'title':'signup error', 'error':error})
@@ -79,6 +82,7 @@ def signup(request):
 
 
 def activate(request):
+    title = "email_varifiaction" # used to display as page title, nothing special!
     path = str(request.path)
     key = path.split("validate/", 1)[1]
     error = ""
@@ -93,8 +97,15 @@ def activate(request):
 
         # Deleting from Temp_user
         Temp_user.objects.filter(uname=tuser.uname).delete()
-        return HttpResponse("<h1> Welcome to snapshare! </h1> <br />Thanks for varifying your email! try logging in! ")
+        message = [
+            "Welcome to snapshare!", 
+            """Thanks for varifying your email! try <a href="{% url 'login' %}">logging in!"""
+        ]
     
     else:
-        error = "This way does not lead to mars!"
-    return HttpResponse(key + "<br /> <h1>" + error + "</h1>")
+        title = "404"
+        message = ["This way does not leads to mars!"]
+
+    img = pyfunctions.get_cute_image()
+    message.append('<img src="' + img + '" height="200px" width="200px" alt="">')
+    return render(request, 'accounts/message.html', {'title':title, 'messages':message})
