@@ -8,37 +8,6 @@ from . import pyfunctions
 from .models import Temp_user
 
 
-# def signup(request):
-
-#     current_site = get_current_site(request)
-#     if request.user.is_authenticated:
-#         return redirect('index')
-#     else:
-#         if request.method == 'POST':
-#             if request.POST['password1'] == request.POST['password2']:
-#                 try:
-#                     user = Temp_user.objects.get(username=request.POST['username'])
-#                     return render(request, 'accounts/signup.html', {'error':'Username has already been taken'})
-#                 except User.DoesNotExist:
-#                     token = pyfunctions.generate_url()
-#                     user = Temp_user.objects.create(uname=request.POST['username'], password=request.POST['password1'], email=request.POST['email'], token=token)
-
-#                     reciever = ['avikmukherjee1908@gmal.com']
-#                     url = "http://localhost:8000/accounts/validate/" + token
-    
-#                     if pyfunctions.varification_mailto(reciever, url):
-                        
-#                         responce = "<h2> Email Sent <br /> Please Varify you email! </h2>"
-#                     else:
-#                         responce = "<h1> ERROR! mail not sent </h1>" 
-    
-#                     return HttpResponse(responce)
-#             else:
-#                 return render(request, 'accounts/signup.html', {'title':'signup', 'error':'Passwords must match'})
-#         else:
-#             return render(request, 'accounts/signup.html', {'title':'signup'})
-
-
 def login(request):
     if request.user.is_authenticated:
         return redirect(request.META.get('HTTP_REFERER', 'index'))
@@ -49,7 +18,11 @@ def login(request):
                 auth.login(request, user)
                 return redirect('index')
             else:
-                return render(request, 'accounts/login.html',{"title":"log in", 'error':'username or password is incorrect.'})
+                error = "username or password invalid!"
+                if Temp_user.objects.filter(uname=request.POST['username']).exists():
+                    error = "Please Varify your email before logging in!"
+                
+                return render(request, 'accounts/login.html',{"title":"log in", 'error':error})
         else:
             return render(request, 'accounts/login.html', {"title":"log in"})
 
@@ -88,7 +61,7 @@ def signup(request):
             # ===========================
             else:
                 token = pyfunctions.generate_url()
-                Temp_user.objects.create(uname=request.POST['username'], password=request.POST['password1'], email=request.POST['email'], token=token)
+                Temp_user.objects.create(uname=request.POST['username'], password=make_password(request.POST['password1']), email=request.POST['email'], token=token)
                 reciever = [request.POST["email"]]
                 if pyfunctions.varification_mailto(reciever, token):
                     responce = "<h2> Email Sent <br /> Please Varify you email! </h2>"
@@ -112,7 +85,9 @@ def activate(request):
         tuser = Temp_user.objects.get(token=key)
         # Adding to user
         user = User.objects.create_user(tuser.uname, password=tuser.password, email=tuser.email)
+        user.set_password(tuser.password) # Using this since django will re-hash the hashed password => Thus explicitely, re mentioning it!
         user.is_active = True
+        user.save()
 
         # Deleting from Temp_user
         Temp_user.objects.filter(uname=tuser.uname).delete()
