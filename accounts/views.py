@@ -99,9 +99,10 @@ def activate(request):
 
             # Deleting from Temp_user
             Temp_user.objects.filter(uname=tuser.uname).delete()
+            login = '"' + reverse('login') + '"'
             message = [
                 "Welcome to snapshare!", 
-                """Thanks for varifying your email! try <a href="{% url 'login' %}">logging in! </a>"""
+                """Thanks for varifying your email! try <a href=""" + login + """>logging in! </a>"""
             ]
         
         else:
