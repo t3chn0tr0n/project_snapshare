@@ -6,5 +6,5 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('logout/', views.logout, name='logout'),
     re_path(r'validate/*', views.activate, name='activate'),
-    # path('email/', views.email, name='email'),
+    path('resend/', views.resend, name='resend'),
 ]
