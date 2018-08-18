@@ -1,0 +1,32 @@
+{%extends 'snaps/header.html/'%}
+
+{% block body %}
+    <div class="container">
+        <form class="post-form" method="POST" action="{% url 'upload' %}">
+            {% csrf_token %}
+            <label for="title"> Enter your Title </label>
+            <input name="title" type="text" class="form-control" style="width: 70%;" placeholder="Enter Title" id="title" required/>
+            <br />
+
+            <label for="caption"> Enter your Caption </label>
+            <input name="caption" type="text" class="form-control" style="width: 70%;" placeholder="Enter Caption" id="caption" required/>
+            <br />
+
+            <label for="album"> Enter Album name (keep blank to use 'General Upload') </label>
+            <input name="title" type="text" class="form-control" style="width: 70%;" placeholder="General Upload" id="album" />
+            <br />        
+
+            <label class="btn btn-primary " for="file">
+                <input id="file" type="file" accept="image/*" style="display:none" onchange="$('#upload-file-info').html(this.files[0].name)" />
+                    + Browse
+            </label>
+            <span class='label label-info' id="upload-file-info"></span>
+            <br />
+
+            <center>
+                <input name="submit" type="submit" class="btn btn-success" value="Upload" />
+            </center>
+        </form>
+    </div>
+
+{% endblock %}
