@@ -15,14 +15,18 @@
 
     <body>
         <!-- navbar -->
-        {% include 'snaps/includes/navbar.html' %}
+        <div>
+            {% include 'snaps/includes/navbar.html' %}
+        </div>
 
         <!-- Main Content gets added here -->
-        {% block body%}
-        {% endblock %}
+        <div>
+            {% block body%}
+            {% endblock %}
+        </div>
 
         <!-- An Amazing footer -->
-        <footer class="navbar-fixed-bottom">
+        <footer>
             {% include 'snaps/includes/footbanner.html' %}
         </footer>
 
