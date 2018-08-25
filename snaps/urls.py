@@ -6,4 +6,5 @@ urlpatterns = [
     path('upload/', views.upload, name="upload"),
     path('profile/', views.profile, name="profile"),
     path('albums/', views.albums, name="albums"),
+    path('upload/', views.upload, name='upload'),
 ]
