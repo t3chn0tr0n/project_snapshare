@@ -24,8 +24,11 @@ def upload(request):
 
         if 'new_album' in request.POST and request.POST['new_album'] == 'True' :
 
-            if album == None:
-                album = album_exists('General Upload')
+            if album == "":
+                if album_exists('General Upload'):
+                    album = album_exists('General Upload')
+                else:
+                    Album.objects.create(name=album, author=request.user.username)           
             
             elif album_exists(album) != False:
                 album = album_exists(album)
@@ -39,23 +42,26 @@ def upload(request):
 
         else:
             if album == "":
-                album = album_exists('General Upload')
+                if album_exists('General Upload'):
+                    album = album_exists('General Upload')
+                else:
+                    Album.objects.create(name=album, author=request.user.username)
             else:    
                 album = album_exists(album)
                 if album == False:
                     error = """
                     Invalid Album name/ Album does not exists ->
                     (Tip: Check the 'New Album' to create one on the fly!)"""
-        
-        # creating new snap
-        myfile = request.FILES['file']
-       
-        uploaded_image = Snap.objects.create(image=myfile, author=request.user.username, name=name, caption=caption)
 
         if error:
             return render(request, 'snaps/upload.html', {'title':'upload error', 'error':error})
         else:
-            return render(request, 'snaps/image.html', {'title':'upload success', 'image':uploaded_image.image.url})
+            # creating new snap
+            myfile = request.FILES['file']
+            uploaded_image = Snap.objects.create(image=myfile, author=request.user.username, name=name, caption=caption)
+            # associating the image with album
+            uploaded_image.album.add(album)
+            return render(request, 'snaps/image.html', {'title':'upload success', 'image':uploaded_image.image.url, 'album':album.album_snaps.all()})
          
     else:    
         return render(request, 'snaps/upload.html', {'title':'upload'})

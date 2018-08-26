@@ -21,7 +21,7 @@ class Snap(models.Model):
     caption = models.CharField(default=name, max_length=30, null=True)
     likes = models.PositiveSmallIntegerField(default=0, null=True)
     author = models.CharField(default="", max_length=30, null=True)
-    #album = models.ManyToManyField('snaps.Album', related_name='album_snaps')
+    album = models.ManyToManyField('snaps.Album', related_name='album_snaps')
     tags = ArrayField(models.CharField(max_length=20, blank=True, default=""), default=[], null=True) 
     
     def pub_date_prettyfy(self):
